@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quiz Agro Sustentável</title>
+
+<link rel="stylesheet" href="quiz.css">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <div class="logo">
+        Agro forte, futuro sustentável
+    </div>
+
+    <div class="menu">
+
+        <a class="btn-nav ativo" href="index.html">
+            Início
+        </a>
+
+    </div>
+
+</nav>
+
+<!-- HERO -->
+
+<header class="hero">
+
+    <img src="./Screenshots/agro_maquinas_soja_14abr22_GoodLifeStudio_Getty.jpg">
+
+    <div class="overlay"></div>
+
+    <div class="hero-text">
+
+        <h1>
+            Quiz Agro Sustentável
+        </h1>
+
+        <p>
+            Você realmente sabe sobre a sustentabilidade quando se trata de produção agrícola?
+        </p>
+
+    </div>
+
+</header>
+
+<!-- QUIZ -->
+
+<main>
+
+<section class="quiz-section">
+
+<div class="container">
+
+<div id="quiz">
+
+<div class="topo">
+
+<span class="tag">
+    Evln
+</span>
+
+<h2>
+    Quanto você sabe sobre produção sustentável?
+</h2>
+
+<p>
+    Responda o quiz abaixo e descubra o quanto você conhece sobre sustentabilidade agrícola.
+</p>
+
+</div>
+
+<div class="pergunta" id="pergunta"></div>
+
+<div class="opcoes" id="opcoes"></div>
+
+<div class="footer">
+
+    <span class="pontuacao-box">
+        Pontuação:
+        <strong id="pontuacao">0</strong>
+    </span>
+
+    <button id="proximo">
+        Próxima →
+    </button>
+
+</div>
+
+</div>
+
+<div class="resultado" id="resultado">
+
+<h2>
+    Seu resultado Final
+</h2>
+
+<p id="mensagem"></p>
+
+<button onclick="reiniciarQuiz()">
+    Jogar Novamente
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<script>
+
+const perguntas = [
+
+{
+  pergunta: "O que a agricultura sustentável busca fazer?",
+  opcoes: [
+    "Aumentar a poluição",
+    "Produzir sem prejudicar a natureza",
+    "Gastar mais água",
+    "Desmatar florestas"
+  ],
+  correta: 1
+},
+
+{
+  pergunta: "Qual recurso natural é essencial para a agricultura?",
+  opcoes: [
+    "Plástico",
+    "Combustível",
+    "Água",
+    "Fumaça"
+  ],
+  correta: 2
+},
+
+{
+  pergunta: "O que ajuda a reduzir a poluição?",
+  opcoes: [
+    "Queimadas",
+    "Desmatamento",
+    "Reciclagem",
+    "Desperdício"
+  ],
+  correta: 2
+},
+
+{
+  pergunta: "Qual prática ajuda na preservação ambiental?",
+  opcoes: [
+    "Fazer queimadas",
+    "Plantar árvores",
+    "Jogar lixo nos rios",
+    "Desperdiçar água"
+  ],
+  correta: 1
+},
+
+{
+  pergunta: "O tema “Agro Forte, Futuro Sustentável” mostra que:",
+  opcoes: [
+    "O meio ambiente não é importante",
+    "A tecnologia prejudica o campo",
+    "Produção e natureza podem caminhar juntas",
+    "Sustentabilidade não é necessária"
+  ],
+  correta: 2
+}
+
+];
+
+let atual = 0;
+let pontos = 0;
+let respondeu = false;
+
+const pergunta = document.getElementById("pergunta");
+const opcoes = document.getElementById("opcoes");
+const pontuacao = document.getElementById("pontuacao");
+const proximo = document.getElementById("proximo");
+
+function carregarPergunta(){
+
+  respondeu = false;
+
+  pergunta.innerText = perguntas[atual].pergunta;
+
+  opcoes.innerHTML = "";
+
+  perguntas[atual].opcoes.forEach((opcao,index)=>{
+
+    const div = document.createElement("div");
+
+    div.classList.add("opcao");
+
+    div.innerText = opcao;
+
+    div.onclick = () => responder(index);
+
+    opcoes.appendChild(div);
+
+  });
+
+}
+
+function responder(index){
+
+  if(respondeu) return;
+
+  respondeu = true;
+
+  const correta = perguntas[atual].correta;
+
+  const todas = document.querySelectorAll(".opcao");
+
+  todas.forEach((item,i)=>{
+
+    if(i === correta){
+      item.classList.add("correta");
+    }
+
+    if(i === index && index !== correta){
+      item.classList.add("errada");
+    }
+
+  });
+
+  if(index === correta){
+
+    pontos++;
+
+    pontuacao.innerText = pontos;
+
+  }
+
+}
+
+proximo.addEventListener("click",()=>{
+
+  if(!respondeu){
+
+    alert("Escolha uma resposta!");
+
+    return;
+
+  }
+
+  atual++;
+
+  if(atual < perguntas.length){
+
+    carregarPergunta();
+
+  } else {
+
+    mostrarResultado();
+
+  }
+
+});
+
+function mostrarResultado(){
+
+  document.getElementById("quiz").style.display = "none";
+
+  document.getElementById("resultado").style.display = "block";
+
+  let texto = "";
+
+  if(pontos >= 4){
+
+    texto = `Parabéns! Você acertou ${pontos} de ${perguntas.length}.`;
+
+  }
+
+  else if(pontos >= 2){
+
+    texto = `Mandou bem! Você acertou ${pontos} de ${perguntas.length}.`;
+
+  }
+
+  else{
+
+    texto = `Você acertou,  ${pontos} de ${perguntas.length}.`;
+
+  }
+
+  document.getElementById("mensagem").innerText = texto;
+
+}
+
+function reiniciarQuiz(){
+
+  atual = 0;
+
+  pontos = 0;
+
+  pontuacao.innerText = 0;
+
+  document.getElementById("quiz").style.display = "block";
+
+  document.getElementById("resultado").style.display = "none";
+
+  carregarPergunta();
+
+}
+
+carregarPergunta();
+
+</script>
+
+</body>
+
+</html>
